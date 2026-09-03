@@ -311,3 +311,49 @@ if any cell would not parse, so this class of bug cannot reach the notebook agai
 ### Verification
 
 0 errors, 16 figures, detector numbers unchanged.
+
+## 2026-09-03 — Added the ANOVA route to the interaction; corrected an overstatement
+
+Question raised: why can the interaction not be handled with pairwise comparisons
+plus a p-value correction, or with an ANOVA? Tested both empirically rather than
+arguing from theory.
+
+### ANOVA — the objection was right
+
+A two-way ANOVA (phase × direction) has an interaction term that tests exactly
+this, and on this session all three routes agree:
+
+| Method | Interaction |
+|---|---|
+| Two-way ANOVA on raw RT | F = 31.7, p < 0.001 |
+| ANOVA on ranks | F = 36.5, p < 0.001 |
+| Permutation test on medians | +31.5 ms, p = 0.0002 |
+
+The previous wording implied the permutation test was necessary. It is a **choice**.
+Section 11 now says so, adds `compare_interaction_anova` (statsmodels, guarded by
+try/except and pre-installed on Colab), and runs it alongside the permutation test
+so the student sees both agree. The three reasons given for defaulting to the
+permutation test are now honest ones:
+
+1. every figure in the notebook plots a **median**; an ANOVA tests **means**, and
+   testing one while plotting the other invites a report where the figure and the
+   statistic disagree
+2. RT fails normality (Shapiro-Wilk p = 4e-07) and the four cells fail equal
+   variance (Levene p = 0.025) — with ~150 trials per cell the ANOVA survives this,
+   as the agreement above shows, but it has to be *checked*
+3. the permutation test reports the effect in **milliseconds**; `F = 31.7` does not
+   say whether the extra slowing was 3 ms or 30 ms
+
+### P-value correction — this one does not work, and the reason is specific
+
+A correction addresses a different problem: inflated false positives across a
+family of tests. Applied to the two separate per-direction tests it turns
+p = 1.2e-18 and p = 0.68 into 2.4e-18 and 1.0 — still two numbers, neither an
+estimate of how much *more* one group changed. The failure is not that the
+p-values are too generous; it is that the contrast was never computed, and no
+correction can produce an estimate of a quantity that was not measured.
+
+### Verification
+
+0 errors, 16 figures. The notebook's ANOVA reports F = 31.7, p < 0.001, matching
+the standalone calculation.
