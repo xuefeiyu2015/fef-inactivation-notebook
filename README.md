@@ -10,7 +10,9 @@ single-neuron recordings from the **frontal eye field (FEF)**, recorded before,
 during and after the FEF was temporarily silenced with muscimol.
 
 It is written for someone new to Python — plain functions, explicit `for` loops,
-no classes, and only libraries that Colab already ships with.
+no classes, and only libraries that Colab already ships with. Results are shown as
+plots rather than printed numbers: 31 figures, each with bootstrap error bars where
+a comparison is being made.
 
 ## What the notebook covers
 
@@ -22,7 +24,7 @@ no classes, and only libraries that Colab already ships with.
 6. **Detecting saccades from the eye trace**, with a visual check
 7. The saccade parameters, and validation figures (main sequence, landing points)
 8. The neuron: rasters and PSTHs, target-aligned versus saccade-aligned
-9. Fourteen open questions with starter code
+9. Fourteen exploration questions, **each answered with a figure**, plus starter code
 
 ## The data
 
@@ -105,7 +107,4 @@ All three sessions execute top to bottom without errors, including
 `Adams110725_OneDR`, which has only two injection phases and therefore exercises
 the generic phase handling.
 
-## Credit
 
-Data recorded in the OHLab. The notebook is a Python translation of the MATLAB
-analysis in `LoadAndVisulizeData_Old.m` and its helper functions.

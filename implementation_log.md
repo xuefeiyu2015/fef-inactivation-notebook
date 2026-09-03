@@ -125,3 +125,65 @@ whole Library. The home repo was left untouched.
   exactly as a student receives it: it downloaded the data from the release and
   ran all 82 cells with 0 errors and 11 figures in 28 seconds, reproducing
   1716/1740 saccades detected and the expected RT table.
+
+## 2026-09-03 — Every exploration question now answers with a figure
+
+Requested change: the questions in section 10 reported results as printed numbers.
+Plots show the size of an effect and the spread around it; a printed median hides
+both. The notebook went from 11 figures to **31**.
+
+### Added — a small charting toolkit in section 8, reused by every question
+
+- **`compute_bootstrap_ci`** — resamples the trials 1000 times to get a 95% range
+  for a median, so every bar carries an honest error bar.
+- **`compute_summary_by_phase`** — generalised. It used to hardcode a split by
+  saccade direction; it now takes `phases` and `groups` as two lists of
+  `(name, mask)` pairs, so the same function splits by phase and direction, phase
+  and object value, or early against late trials. Q2 uses that last form.
+- **`compute_proportion_by_phase`** — percentages (detection rate, anticipation
+  rate) returned in the same row shape, so one plotting function draws either.
+- **`plot_summary_by_phase`** — the workhorse grouped bar chart with error bars,
+  value labels and trial counts. Most questions are now two lines.
+- `DIRECTION_GROUPS`, `VALUE_GROUPS`, `ALL_TRIALS` as ready-made masks.
+
+### Added — per-question figures
+
+| Q | Figure |
+|---|---|
+| 1 | value-split bars + overlaid RT distributions |
+| 2 | early-vs-late bars (reusing `phases` for time blocks) + session course |
+| 3 | detection-rate bars |
+| 4 | every measure as a percentage of its own "before" value, on one axis |
+| 5 | landing-error bars + one endpoint scatter per phase, with spread |
+| 6 | anticipation-rate bars |
+| 7 | raw main-sequence scatter beside amplitude-binned medians |
+| 8 | the two PSTH alignments overlaid, with peak height and latency marked |
+| 9 | firing-rate bars + one PSTH per injection phase |
+| 10 | firing rate against RT, one panel per phase, with a binned trend line |
+| 11 | `analyse_session()` runs the whole pipeline on all three sessions, one panel each |
+| 13 | change from "before" to every later phase, with bootstrap ranges |
+| 14 | detector-setting sweep: median RT and detection rate against `velocity_threshold` |
+
+`analyse_session` in Q11 is the capstone — it wraps the pipeline the student has
+just built step by step into one function, which is also what makes a
+three-session comparison possible.
+
+### Problems found and fixed
+
+- **Bar value labels were struck through by their own error bars.** The label was
+  drawn at the bar top; it is now drawn above the upper error-bar cap.
+- **Legends overlapped the bars.** `plot_summary_by_phase` now adds 30% headroom
+  and pins the legend to the upper right.
+- **Q13 compared the wrong pair of phases.** It contrasted "before" against the
+  last phase only, but the RT effect lives in "before to during" — so the figure
+  contradicted the text telling the student what to look for. It now compares
+  "before" against every later phase. The result is now unmistakable: rightward
+  changes by +35 ms with a 95% range of [26, 46] that clears zero, while leftward
+  straddles zero.
+- A `%%` in a title with no `%` operator applied would have rendered literally.
+
+### Verification
+
+Executed end to end again: **0 errors, 31 figures**, on a clean run that downloaded
+all three sessions from the release. Every figure inspected visually. The section 8
+regression numbers are unchanged (1716/1740 detected; RT leftward 98/102/104).
