@@ -25,14 +25,14 @@ is the project the student carries out and writes up.
 
 | Step | Question |
 |---|---|
-| 1 | What does the inactivation do at all? (the neuron, then the behaviour) |
+| 1 | What does the inactivation do at all? The neuron, the behaviour, the 2-D endpoint maps, and whether the deficit **compensates** as the session goes on |
 | 2 | Does reward value change the behaviour? |
-| 3 | **Does inactivation hurt good and bad objects differently?** |
+| 3 | **Does inactivation hurt good and bad objects differently?** Tracked as the good-minus-bad gap on each side, tested as a three-way interaction, then decomposed |
 | 4 | Extension (design exercise): what if value were predictable from location? |
 
 Each step gives one measure worked end to end as a template, then `TODO` cells for
 the rest. Every measure is computed for the student — they choose what to plot and
-what to compare. The section closes with a report outline.
+what to compare.
 
 ## What the notebook covers
 
@@ -44,9 +44,10 @@ what to compare. The section closes with a report outline.
 6. **Detecting saccades from the eye trace**, with a visual check
 7. The saccade parameters, and validation figures (main sequence, landing points)
 8. More behavioural measures: radial/tangential endpoint error, endpoint scatter,
-   gaze hold on the object, anticipation
+   2-D endpoint density maps, gaze hold on the object, anticipation
 9. The neuron: rasters and PSTHs, target-aligned versus saccade-aligned
-10. Statistics: group comparison, change, and the **interaction** test
+10. Statistics: group comparison, change, and the two- and three-way **interaction**
+    tests (permutation and ANOVA)
 11. The project itself
 
 ## The data

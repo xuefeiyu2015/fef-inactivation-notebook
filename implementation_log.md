@@ -401,3 +401,77 @@ Step 1.1 result, which the previous figure hid.
 ### Verification
 
 0 errors, 16 figures. Both session-course figures inspected and clearly improved.
+
+## 2026-09-03 — Compensation moved into Step 1; Step 3 rebuilt around the value gap
+
+Three corrections, all structural.
+
+### 1. The compensation question belongs to Step 1, not the extension
+
+"Does the deficit shrink while the FEF is inactivated?" is about the inactivation
+alone — no reward, no object value — so it is now **Step 1.3**, the closing question
+of the first step. The Step 4 extension no longer owns it; it now asks the narrower
+question of whether *predictability* would speed compensation up, using the Step 1.3
+answer as the baseline to beat.
+
+Two things Step 1.3 has to teach, because both are traps:
+
+- **Measure the deficit, not the raw RT.** Both directions get faster late in this
+  session as the monkey anticipates the go cue more, so a falling rightward RT is
+  not recovery. The rightward-minus-leftward difference cancels it.
+- **Washout and compensation look identical in the behaviour.** The recorded neuron
+  is the only handle: if firing recovers in step with behaviour it is washout; if
+  behaviour recovers while the neuron is still suppressed it is compensation. The
+  figure plots both time courses on twin axes so the *shapes* can be compared.
+
+Measured on this session, the two shapes clearly differ — the neuron recovers
+steadily (22.6 → 13.3 → 14.1 → 22.0 spikes/s) while the behavioural deficit bounces
+(+18 → +49 → +12 → +42 ms).
+
+### 2. Step 3 rebuilt around the good-minus-bad gap
+
+The old version compared good against bad within each side and then eyeballed the
+control. The quantity now tracked throughout is the **value gap**, and the question
+is how that gap differs between sides across phases — a three-way interaction, with
+the unaffected side inside the measurement rather than bolted on. Anything that
+moves the value gap for reasons unrelated to the drug (a progressively less thirsty
+monkey caring less about reward size) shifts both sides and cancels.
+
+Split into three sub-steps: **3.1** look at the gaps (per side, per block, plus
+their difference), **3.2** test them, **3.3** decompose — did the good trials get
+worse or the bad trials get better? 3.3 is where the interpretation lives and is
+the part usually skipped.
+
+`compare_three_way_anova` added to section 11. The signed gap is kept rather than
+`|gap|`, because on this session one side's gap **flips sign**, which an absolute
+value would hide.
+
+The result is genuinely awkward and the text says so: the three-way term is **not**
+significant before→during (F = 0.93, p = 0.33) but **is** before→after
+(F = 12.21, p < 0.001) — while the basic deficit runs the other way, large during
+and gone after. The value effect appears where the inactivation effect has faded,
+which points at time in the session rather than the drug.
+
+### 3. Two-dimensional endpoint maps
+
+2-D plotting was never introduced. Section 9 now has `compute_endpoint_heatmap` /
+`plot_endpoint_heatmaps` (ported from `computeEndpointHeatmap`), introduced with
+the three things that decide whether such a picture is honest: **percentages not
+counts** (the phases have 300 vs 1120 trials, and raw counts would make "before"
+look empty), **one shared colour scale**, and **square panels**. Used in the project
+as Step 1.2b across the finer blocks.
+
+Also added `plot_measure_panel` — six measures × two directions × four blocks on
+one page, which is the compensation summary for Step 1. It shows immediately that
+RT's between-direction gap closes while peak velocity's stays open.
+
+### Removed
+
+The closing "Writing it up", "Two habits", "Where to look if something breaks" and
+"Credit" sections — this is not a report exercise. The notebook now ends with the
+Step 4 extension. Dangling references to a report were cleaned up.
+
+### Verification
+
+0 errors, 20 figures. Section numbering runs 1–12 with Steps 1.1, 1.2, 1.2b, 1.3,
+2, 3, 4. Every new figure inspected.
