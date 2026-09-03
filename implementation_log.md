@@ -262,3 +262,52 @@ that would otherwise have been wrong:
 Executed end to end: **0 errors, 16 figures** (fewer by design — the student now
 produces the rest). Detector numbers unchanged (1716/1740). Gaze: 99.7% on target,
 0.1% censored, 5.4% at ceiling, median hold 824 ms.
+
+## 2026-09-03 — Fixed the rank-test worked example
+
+The worked example for `compare_two_groups` compared leftward against rightward
+saccades before the injection. That comparison is not meaningful — it contrasts two
+different directions rather than anything about the manipulation, and any
+difference reflects target geometry, not the drug.
+
+Replaced with **reaction time across the injection phases**, all three pairwise
+comparisons:
+
+| Comparison | Median difference | p |
+|---|---|---|
+| before → during | +20.0 ms | < 0.001 |
+| before → after | +3.0 ms | 0.50 |
+| during → after | −17.0 ms | < 0.001 |
+
+That tells the real story — RT rises during the injection and returns afterwards —
+and gives three teaching points the old example could not:
+
+- **a null result carrying information**: before vs after is "not distinguishable",
+  which here means *recovery*, not *nothing found*
+- **multiple comparisons**: three phases produce three tests, and a reader cannot
+  judge a p-value without knowing how many were run
+- **pooling versus splitting**: pooled across directions the change is +20 ms;
+  Step 1 splits it into +35 ms on one side and +3.5 ms on the other. What to pool
+  is a scientific choice, not a formatting one.
+
+### Also added: why the interaction needs its own test
+
+A Mann-Whitney test compares two samples; an interaction is a question about four,
+so no single Mann-Whitney can produce it. Section 11 now spells out the tempting
+shortcut and why it is invalid — running the test separately per group and
+comparing the verdicts ("p < 0.001 here, p = 0.68 there, therefore they differ")
+is a well-known fallacy: +35 ms at p = 0.001 and +30 ms at p = 0.06 are nearly the
+same effect with opposite verdicts, decided by group size alone. Mann-Whitney does
+every two-group comparison in the project; the permutation test does the
+interaction.
+
+### Build fix
+
+An escaped-newline slip put a literal line break inside a string literal, so the
+cell failed to parse at run time. `assemble.py` now **compiles every code cell**
+before writing the notebook (blanking `!` magic lines first) and refuses to write
+if any cell would not parse, so this class of bug cannot reach the notebook again.
+
+### Verification
+
+0 errors, 16 figures, detector numbers unchanged.
