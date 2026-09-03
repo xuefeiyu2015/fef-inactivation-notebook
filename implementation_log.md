@@ -730,3 +730,36 @@ instance of it.
 ### Verification
 
 0 errors, 21 figures.
+
+## 2026-09-03 — 3.3 now prints the gaps themselves, not only their changes
+
+Confusion reported: "on the left side the gap between good and bad is more
+obvious" — which is not what the data says, and the notebook's own output invited
+the mistake. STEP 1 printed only the *change* in each side's gap, never the gap
+itself, so "the side whose gap changed most" read naturally as "the side with the
+biggest gap". Different questions, and here they have different answers.
+
+3.3 now leads with the full cell table, with the sign convention stated:
+
+| block | LEFT good | bad | gap | RIGHT good | bad | gap |
+|---|---|---|---|---|---|---|
+| before | 110 | 88 | **+23** | 124 | 78 | **+46** |
+| during | 88 | 112 | −23 | 160 | 134 | +26 |
+| after, 1st half | 114 | 130 | −16 | 144 | 104 | +41 |
+| after, 2nd half | 30 | 90 | **−60** | 110 | 41 | **+68** |
+
+Three things this makes visible that the change-only output hid:
+
+- **The bigger gap at baseline is on the RIGHT** (+46 vs +23), the opposite of the
+  natural reading. What is bigger on the left is the *change* (−83 vs +22.5).
+- **The left gap flips sign**, +23 → −60. At baseline the good object was *slower*
+  on both sides; by the end it is 60 ms faster on the left and still 68 ms slower
+  on the right. This is exactly why the notebook keeps the signed gap rather than
+  `|gap|` — an absolute value would report a reversal as "the gap got bigger".
+- **The good object has the LONGER reaction time at baseline on both sides**
+  (+23, +46), backwards from the usual expectation that reward speeds initiation.
+  Worth noticing before interpreting anything downstream.
+
+### Verification
+
+0 errors, 21 figures.
