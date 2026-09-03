@@ -85,3 +85,43 @@ Both verified by direct measurement; that doc has not been updated.
 `DATA_URLS` in the notebook still holds `PASTE_LINK_HERE` placeholders; the three
 `.npz` files need hosting and their links pasting in. Until then the notebook
 runs via `USE_LOCAL_FILE = True`.
+
+## 2026-09-03 — Published to GitHub with a Colab badge
+
+### Added
+
+- **`.gitignore`** — excludes `*.npz` and `*.mat`, so the data stays out of git
+  history and a clone stays at ~120 KB.
+- Repository published at
+  [`xuefeiyu2015/fef-inactivation-notebook`](https://github.com/xuefeiyu2015/fef-inactivation-notebook)
+  (public), with an **Open in Colab** badge at the top of the README.
+- The three `.npz` files attached to the **`data-v1`** release rather than
+  committed. The notebook's `DATA_URLS` now points at those release assets and is
+  pre-filled, so the student has nothing to configure.
+
+### Changed
+
+- **Download is now pure Python** (`urllib.request.urlretrieve`) instead of
+  `!wget`. `wget` is not installed on stock macOS or Windows, and the `!` shell
+  magic only works inside a notebook — `urlretrieve` works everywhere and reads
+  more plainly for a beginner. The unused Google Drive / `gdown` branch was
+  dropped along with it.
+- **`convert-mat-to-npz.py` no longer hardcodes a home-directory path.** It reads
+  `FEF_DATA_DIR` from the environment, defaulting to `./FEF_Inactivation_OHLab`,
+  so no personal path is published in a public repo.
+
+### Note on the repository
+
+`/Users/xuefeiyu` is itself a git repository (branch `main`, no remote, no
+`.gitignore`, 0 tracked files). This project was given its **own** repository
+inside `SurfinInactivationScript/` rather than being committed to that one — a
+`git add -A` from the home folder would stage `.ssh/`, `.claude.json` and the
+whole Library. The home repo was left untouched.
+
+### Verification
+
+- All three release URLs return HTTP 200 and the downloaded `.npz` loads in numpy.
+- The published notebook was executed **unmodified, in an empty directory**,
+  exactly as a student receives it: it downloaded the data from the release and
+  ran all 82 cells with 0 errors and 11 figures in 28 seconds, reproducing
+  1716/1740 saccades detected and the expected RT table.
