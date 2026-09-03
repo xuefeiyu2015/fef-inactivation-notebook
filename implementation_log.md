@@ -568,3 +568,63 @@ the notebook was written. It did its job.
 ### Verification
 
 0 errors, 21 figures.
+
+## 2026-09-03 — Three-way test rebuilt as one model: omnibus plus corrected contrasts
+
+Question raised: why not put all four phases in one ANOVA and use multiple
+comparisons to find which phase changed? That is the better design, and the
+notebook now does it.
+
+### What was wrong with the previous version
+
+Three separate 2 × 2 × 2 ANOVAs, one per phase pair. Two real problems:
+
+- **No Type I control.** Three independent tests, uncorrected.
+- **The noise estimate threw away data.** Each pairwise model estimated its own
+  residual variance from only the two blocks involved (df 604–846), rather than
+  pooling across the session (df 1700).
+
+### What it does now
+
+One model over all four blocks, then the standard two-stage read:
+
+1. **Omnibus three-way term** (3 df) as the gatekeeper — F = 7.63, p < 0.001.
+   `describe_three_way` refuses to print contrasts if it fails, with the line
+   "Not significant -- stop here. Do not go fishing in the contrasts."
+2. **Per-block contrasts, Holm-corrected**, read straight off the same model.
+
+The one refinement on the suggestion: the post-hoc is **interaction contrasts**,
+not Tukey on cell means. With 4 × 2 × 2 = 16 cells, Tukey would return 120 pairwise
+comparisons, nearly all irrelevant. Coding the model with the baseline as the
+reference level makes the three-way coefficients *already* the three comparisons
+of interest, so they are read directly.
+
+**Verified numerically** that each coefficient equals the hand-computed contrast:
+
+| Block | Hand-computed | Model coefficient |
+|---|---|---|
+| during | +14.4 | +14.4 |
+| after, 1st half | +39.1 | +39.1 |
+| after, 2nd half | +75.5 | +75.5 |
+
+### Why this is better, beyond correctness
+
+The contrasts come out **in milliseconds**. An F value says something happened; it
+never says how big or which way. The output now reads +14.4, +39.1, +75.5 ms, which
+shows the monotonic growth directly and is the thing worth quoting.
+
+### It changed a conclusion
+
+Under the old uncorrected pairwise version, "before vs after, 1st half" was
+significant at p = 0.014. With the pooled error term and Holm correction it is
+p = 0.026 raw, **0.053 corrected — not significant**. Only the last block survives.
+The previous version was overstating.
+
+`compare_three_way_anova` is replaced by `compare_three_way` + `describe_three_way`.
+Callers must list the **reference level first** in each factor's list, which is
+documented and is what makes "gap" mean good minus bad and the side contrast mean
+right minus left.
+
+### Verification
+
+0 errors, 21 figures.

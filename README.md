@@ -46,8 +46,9 @@ what to compare.
 8. More behavioural measures: radial/tangential endpoint error, endpoint scatter,
    2-D endpoint density maps, gaze hold on the object, anticipation
 9. The neuron: rasters and PSTHs, target-aligned versus saccade-aligned
-10. Statistics: group comparison, change, and the two- and three-way **interaction**
-    tests (permutation and ANOVA)
+10. Statistics: group comparison, change, the two-way **interaction** (permutation
+    and ANOVA), and a three-way model with an omnibus test plus Holm-corrected
+    contrasts
 11. The project itself
 
 ## The data
