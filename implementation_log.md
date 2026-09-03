@@ -187,3 +187,78 @@ three-session comparison possible.
 Executed end to end again: **0 errors, 31 figures**, on a clean run that downloaded
 all three sessions from the release. Every figure inspected visually. The section 8
 regression numbers are unchanged (1716/1740 detected; RT leftward 98/102/104).
+
+## 2026-09-03 — Restructured section 10 into a project with a stated goal
+
+Requested change: the difficulty-graded "Level 1–4" questions did not read as a
+project. Reorganised around one goal and four steps, following the structure and
+the analyses already worked out in the MATLAB script.
+
+> **Goal: investigate how reward value shapes the effect of FEF inactivation.**
+
+### New structure
+
+Sections renumbered; the notebook is now 1–12 with the project as section 12.
+
+- **Section 8 trimmed.** It kept the parameter explanations, the detector
+  validation (angle error, landing points, main sequence) and the summary toolkit,
+  but the *result* figures (RT and peak velocity by phase) moved into the project —
+  the student now produces them. The toolkit is demonstrated on **amplitude**
+  instead, deliberately: the target never moved, so amplitude is a control, and
+  seeing what "no effect" looks like is how you learn to recognise a real one.
+- **Section 9 (new) — more behavioural measures**, ported from the MATLAB:
+  - `compute_endpoint_errors` — signed **radial** (+ past target / − undershoot)
+    and **tangential** error in a per-trial target-centred frame, rather than a
+    plain distance, which cannot cancel and hides which way the eye missed
+  - `compute_endpoint_scatter` — 2-D standard distance, a group property, so
+    accuracy and precision stay separate measures
+  - `compute_gaze_hold` — port of `GazeOnTarget_Old.m`, with censoring and the
+    at-ceiling check, plus the ceiling-immune `held_to_offset` binary
+  - everything assembled into `behaviour` and `valid_for` dictionaries
+- **Section 11 (new) — statistics**: `compare_two_groups` (Mann-Whitney, chosen
+  because RT is not bell-shaped), `compare_change`, and `compare_interaction`
+  (permutation test on the difference of differences).
+- **Section 12 — the project**: goal, four steps, a worked template per step,
+  `TODO`s for the rest, and a report outline with the known limitations named.
+
+### What the MATLAB script settled
+
+Reading `GazeOnTarget_Old.m` and `LoadAndVisulizeData_Old.m` changed three choices
+that would otherwise have been wrong:
+
+- **Gaze window 7°, not 5°.** At 5° only about three quarters of compliant trials
+  are captured, and the misses are not random — post-injection saccades land
+  further off centre, so a tight window scores an inaccurate-but-compliant hold as
+  broken and manufactures a shorter hold exactly where the drug makes saccades
+  least accurate. Measured here: 5° gave 97.8% on-target, 7° gives **99.7%**.
+- **Radial/tangential error rather than absolute distance.**
+- **Split the longest phase in half** (`compute_phase_blocks`), since the drug
+  keeps changing inside a 1120-trial "after" phase.
+
+### Problems found and fixed
+
+- **The gaze window must be aligned separately, and long.** The hold is ~824 ms and
+  starts ~150 ms after the GO cue, while the RT window ends at +600 ms — measured
+  there, **96.2% of holds are censored**. Re-aligned at +1800 ms: 0.1% censored.
+- **Extending the shared window broke saccade detection** (1716 → 1554), because a
+  longer window catches later blinks and `smooth_trace` discards any trace with a
+  mid-gap. Fixed by decoupling: detection keeps the ±600 ms *smoothed* product,
+  gaze uses a separate long *raw* product — it only asks "is the eye near the
+  target", which needs no smoothing.
+- **The permutation test reported `p = 0`.** No permutation test can show that;
+  with 2000 shuffles the smallest honest value is 1/2001. Now uses (count+1)/(n+1)
+  and prints `p < 0.001`.
+- **Ambiguous sign in comparison output.** "good 858, bad 728, difference −130"
+  invites the wrong reading. Now prints "difference (bad object minus good object)".
+- **Step 3's guidance presupposed a result the data contradicts.** The text said
+  the effect "should be absent" on the intact side. It is not: on this session the
+  value×phase interaction is *stronger* on the intact side (p < 0.001, −46 ms) than
+  on the affected side (p = 0.031, −20 ms). Rewritten so the control is run and
+  read **first**, with an explicit outcome for "both sides show it — this is a
+  session effect, not an inactivation effect, and saying so is the result."
+
+### Verification
+
+Executed end to end: **0 errors, 16 figures** (fewer by design — the student now
+produces the rest). Detector numbers unchanged (1716/1740). Gaze: 99.7% on target,
+0.1% censored, 5.4% at ceiling, median hold 824 ms.

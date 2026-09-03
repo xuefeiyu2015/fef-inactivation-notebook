@@ -11,8 +11,28 @@ during and after the FEF was temporarily silenced with muscimol.
 
 It is written for someone new to Python — plain functions, explicit `for` loops,
 no classes, and only libraries that Colab already ships with. Results are shown as
-plots rather than printed numbers: 31 figures, each with bootstrap error bars where
-a comparison is being made.
+plots rather than printed numbers, with bootstrap error bars wherever a comparison
+is being made.
+
+## The project
+
+The notebook is a **project**, not a tour. Sections 1–11 build the tools; section 12
+is the project the student carries out and writes up.
+
+> **Goal: investigate how reward value shapes the effect of FEF inactivation.**
+> Does silencing the FEF damage saccades to a valuable object as much as saccades
+> to a worthless one?
+
+| Step | Question |
+|---|---|
+| 1 | What does the inactivation do at all? (the neuron, then the behaviour) |
+| 2 | Does reward value change the behaviour? |
+| 3 | **Does inactivation hurt good and bad objects differently?** |
+| 4 | Extension (design exercise): what if value were predictable from location? |
+
+Each step gives one measure worked end to end as a template, then `TODO` cells for
+the rest. Every measure is computed for the student — they choose what to plot and
+what to compare. The section closes with a report outline.
 
 ## What the notebook covers
 
@@ -23,8 +43,11 @@ a comparison is being made.
 5. Aligning eye traces to the GO cue
 6. **Detecting saccades from the eye trace**, with a visual check
 7. The saccade parameters, and validation figures (main sequence, landing points)
-8. The neuron: rasters and PSTHs, target-aligned versus saccade-aligned
-9. Fourteen exploration questions, **each answered with a figure**, plus starter code
+8. More behavioural measures: radial/tangential endpoint error, endpoint scatter,
+   gaze hold on the object, anticipation
+9. The neuron: rasters and PSTHs, target-aligned versus saccade-aligned
+10. Statistics: group comparison, change, and the **interaction** test
+11. The project itself
 
 ## The data
 
