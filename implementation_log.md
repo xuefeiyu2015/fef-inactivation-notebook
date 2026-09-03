@@ -515,3 +515,56 @@ project's toolkit summary along with `plot_endpoint_heatmaps`.
 ### Verification
 
 0 errors, 21 figures.
+
+## 2026-09-03 — Made the three-way test agree with the figure above it
+
+Question raised: what is the three-way ANOVA actually doing — are four phases being
+tested? No, and the confusion was caused by a genuine inconsistency in the notebook.
+
+**What it does.** Each call is one **2 × 2 × 2** ANOVA. Every trial carries three
+labels — phase, side (left/right), object value (good/bad) — and the three-way
+interaction term is the quantity of interest:
+
+```
+[ gap(right, later) - gap(right, before) ] - [ gap(left, later) - gap(left, before) ]
+                                                          where gap = good - bad
+```
+
+Two levels per factor is deliberate: it makes that term a single readable number.
+Passing four phases at once runs fine and gives F = 7.63, p = 4.6e-05, but a 3-df
+omnibus only says "the value gap behaves differently on the two sides *somewhere*"
+— not where, and not in which direction. So the baseline block is compared against
+each later block in turn.
+
+**The inconsistency.** Figure 3.1 used `phase_blocks` (four blocks, the long
+"after" phase split in half) while the test underneath used `injection_phases`
+(three phases, pairwise). Reading the figure and then the test, they appeared to be
+about different things — because they were. The test now uses `phase_blocks` too,
+so the picture and the statistic describe the same comparisons.
+
+**It also improves the result.** Splitting the "after" phase shows the three-way
+term growing monotonically rather than as one lump:
+
+| Comparison | F | p |
+|---|---|---|
+| before vs during | 0.93 | 0.33 |
+| before vs after, 1st half | 6.10 | 0.014 |
+| before vs after, 2nd half | 16.33 | < 0.001 |
+
+That monotonic rise is much stronger evidence for the interpretation the section
+already argues: a quantity that climbs steadily from the first block to the last is
+following **time in the session**, because the drug goes up and comes back down.
+The guidance now points at the shape of these F values as the decisive clue, and
+the output notes that three tests were run, not one.
+
+`compare_three_way_anova`'s docstring now spells out the design, the formula for
+what the three-way term measures, and why to keep each factor at two levels.
+
+### Build note
+
+The compile check added earlier caught an escaped-newline slip in this edit before
+the notebook was written. It did its job.
+
+### Verification
+
+0 errors, 21 figures.
