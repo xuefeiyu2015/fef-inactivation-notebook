@@ -687,3 +687,46 @@ nested output lines up instead of running ragged.
 ### Verification
 
 0 errors, 21 figures.
+
+## 2026-09-03 — Added the simple-effects test (does the gap move *within* one side?)
+
+Question raised: on the rightward side the good-object change is smaller than the
+bad-object change — is there a test for that, or does the multi-way ANOVA already
+cover it?
+
+**The multi-way ANOVA does not cover it.** The three-way term asks whether the
+value gap moved *differently on the two sides*. "Did the gap move within the
+rightward side?" is a **simple effect** — a different contrast — and a three-way
+term can be significant while neither side moves much, or while only the control
+side moves.
+
+`compare_simple_effects` + `describe_simple_effects` added to section 11. They read
+each side's own value-gap change out of the **same pooled model** as
+`compare_three_way`, by making that side the reference level, so the two tests
+agree and share one estimate of the noise. 3.3's STEP 1 now uses it in place of the
+per-side permutation test, which was measuring medians while the three-way test
+measured means.
+
+### What it shows, and why it matters here
+
+| side | during | after 1st | after 2nd |
+|---|---|---|---|
+| left (intact) | −39.3 ms, p = 0.005 | −33.5 ms, p = 0.008 | −72.5 ms, p < 0.001 |
+| right (affected) | −24.9 ms, p = 0.072 | +5.6 ms, p = 0.65 | +3.0 ms, p = 0.80 |
+
+The value gap on the **affected** side never detectably changes. Everything the
+three-way term picked up comes from the intact side. So the answer to the question
+that prompted this is: the good-vs-bad difference in change on the rightward side
+is **not** significant, and the notebook now says so with a test rather than
+leaving it to be eyeballed from two separate p-values.
+
+That also matters for how the earlier decomposition reads: rightward good
+(−15.0 ms, p = 0.008) and rightward bad (−37.5 ms, p = 0.023) are both individually
+significant, and it is tempting to conclude they differ from each other. They do
+not — that comparison is p = 0.80. This is the same "difference between significant
+and not significant" trap the notebook warns about in section 11, now with a worked
+instance of it.
+
+### Verification
+
+0 errors, 21 figures.
