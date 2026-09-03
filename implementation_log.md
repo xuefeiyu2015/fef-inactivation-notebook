@@ -475,3 +475,43 @@ Step 4 extension. Dangling references to a report were cleaned up.
 
 0 errors, 20 figures. Section numbering runs 1–12 with Steps 1.1, 1.2, 1.2b, 1.3,
 2, 3, 4. Every new figure inspected.
+
+## 2026-09-03 — Step 2 restricted to the baseline
+
+Step 2 was splitting by injection phase as well as object value, which pre-empted
+Step 3 and muddled its own purpose. Its job is only to establish **what reward
+value does to this monkey's behaviour normally**, so it now uses the
+**before-injection trials only**, and says explicitly that everything about the
+injection interacting with value belongs to Step 3.
+
+No new machinery was needed. `compute_summary_by_phase` takes any two lists of
+`(name, mask)` pairs, so Step 2 hands it **direction** as the first factor and
+**object value** as the second, and restricts the whole thing with one line:
+
+```python
+baseline = injection_phases[0][1]
+valid = valid_for[measure] & baseline
+```
+
+Splitting by direction is kept even though both sides are intact here, and it
+immediately earns its place: at baseline the gaze-hold value gap is **+283 ms on
+the left but only +28 ms on the right**. A value effect that already differs
+between the sides before any drug is something Step 3 has to take into account
+rather than discover halfway through, so Step 2 now says so.
+
+A new TODO closes the step by asking the student to write down the size of the
+baseline value effect for each measure — that list is exactly what Step 3 then asks
+whether the injection changed. And a measure with no baseline value effect cannot
+show the injection changing that effect, which makes a null here informative rather
+than a failure.
+
+### Fixed
+
+`plot_distributions_by_group` was defined inside the old Level-1 question cell and
+was lost when that section was replaced, so Step 2 raised `NameError`. It now lives
+in the section 8 toolkit with the other plotting helpers, and is listed in the
+project's toolkit summary along with `plot_endpoint_heatmaps`.
+
+### Verification
+
+0 errors, 21 figures.
