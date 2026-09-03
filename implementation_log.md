@@ -357,3 +357,47 @@ correction can produce an estimate of a quantity that was not measured.
 
 0 errors, 16 figures. The notebook's ANOVA reports F = 31.7, p < 0.001, matching
 the standalone calculation.
+
+## 2026-09-03 — Fixed the y-limits and the smoothing on the session-course plots
+
+Question raised: why is the y-axis on figure 1.1 so large? Two separate bugs, both
+real.
+
+### 1. The axis was scaled to the most extreme trial
+
+`plot_session_course` let matplotlib autoscale, so the axis was set by the raw
+per-trial scatter. For the firing rate that scatter runs 0–115 spikes/s while the
+signal (the smoothed line) lives between 3.6 and 44.8, and the 99th percentile is
+70 — so a handful of trials stretched the axis to ~130 and squashed the line into
+the bottom third of the figure.
+
+The limits are now taken from the **smoothed lines plus the 1st–99th percentile of
+the raw points**, so the line is always fully visible and a few outliers cannot
+dominate. The docstring says plainly that a few extreme points may then sit outside
+the visible range. Figure 1.1's axis went from 0–130 to 0–85.
+
+### 2. A running median of a firing rate draws a staircase
+
+A rate measured in a 200 ms window can only be 0, 5, 10, 15 ... spikes/s — you
+cannot have half a spike. A running median of numbers taking only a few values
+snaps to those values: across the whole session the running median produced just
+**13 distinct values**, versus 179 for a running mean. The line was a visible
+staircase.
+
+Worse, the comment in Step 1.1 already claimed `smooth_method="mean"` was being
+used. That parameter did not exist — the advice was carried over from the MATLAB
+but never implemented, so the comment described behaviour the code did not have.
+
+`compute_running_median` is now `compute_running_average` with a `method`
+argument ("median" by default, "mean" for rates), `plot_session_course` passes it
+through, and Step 1.1 actually uses `method="mean"`. The student is invited to
+switch it back to "median" once to see the difference.
+
+**This mattered scientifically, not just cosmetically.** With the axis fixed and
+the line smoothed, the neuron's response is now visibly dropping from about 22 to
+about 5 spikes/s during the injection and partially recovering afterwards — the
+Step 1.1 result, which the previous figure hid.
+
+### Verification
+
+0 errors, 16 figures. Both session-course figures inspected and clearly improved.
