@@ -628,3 +628,62 @@ right minus left.
 ### Verification
 
 0 errors, 21 figures.
+
+## 2026-09-03 — Step 3 ends with the decomposition, not with interpretation prose
+
+Removed the "What the test actually is" and "Read the output carefully" markdown
+blocks after 3.2. They told the student what to conclude before they had taken the
+effect apart, which is backwards — and the decomposition turns out to answer the
+question far better than the prose did.
+
+### 3.3 now asks "which side, and which object?" and answers it twice
+
+Previously 3.3 had figures but no statistics. It now runs a two-stage decomposition
+underneath them:
+
+1. **Which side's value gap moved?** A two-way interaction (phase × object value)
+   run once per side.
+2. **Within each side, which object moved?** Good and bad tested separately,
+   baseline against the later block.
+
+On this session that decomposition is decisive, and it overturns the obvious
+reading of the three-way test:
+
+| | value gap change | p |
+|---|---|---|
+| rightward (affected) | +22.5 ms | 0.30 — no detectable change |
+| leftward (intact) | −83.0 ms | < 0.001 |
+
+| | change | p |
+|---|---|---|
+| leftward, **good** | **−81.0 ms** | < 0.001 |
+| leftward, bad | +2.0 ms | 0.34 |
+| rightward, good | −15.0 ms | 0.008 |
+| rightward, bad | −37.5 ms | 0.023 |
+
+So the significant three-way term is driven by the **intact** side, and specifically
+by good-object trials there speeding up by 81 ms. The affected side's value gap did
+not detectably change at all. A student who stopped at the omnibus would have
+concluded the opposite, which is exactly the point of making the decomposition a
+required step rather than an optional one.
+
+The numbers now make that case on their own, which is why the interpretive prose
+was not worth keeping.
+
+### TODOs rewritten
+
+They now say to repeat 3.1, 3.2 and 3.3 for `peak_velocity`, `duration`,
+`radial_error` and `hold_duration`, with the reasoning for why peak velocity is the
+one to look at hardest (it was still depressed in the "after" blocks, so it is where
+an inactivation-driven value effect should appear) and why `hold_duration` has the
+most room to move (largest baseline value effect in Step 2). A final TODO asks for
+one table across all measures, which is the answer to the project.
+
+### Also
+
+`describe_comparison` and `describe_interaction` take an `indent` argument, so
+nested output lines up instead of running ragged.
+
+### Verification
+
+0 errors, 21 figures.
