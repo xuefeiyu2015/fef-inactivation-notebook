@@ -763,3 +763,59 @@ Three things this makes visible that the change-only output hid:
 ### Verification
 
 0 errors, 21 figures.
+
+## 2026-09-03 — Added the worked-solutions notebook
+
+`fef-inactivation-colab-SOLUTIONS.ipynb`: sections 1–11 are **byte-identical** to
+the student notebook (verified by comparing cell sources); only the title cell and
+section 12 differ. Every one of the 30 project `TODO`s is answered — the code that
+produces the figure, then the reasoning — with the original TODO list kept after
+each solution in a collapsed `<details>` block for cross-reference.
+
+Built by `patch_solutions.py`, which rewrites `build_part5.py` into
+`build_part5_solutions.py`, and assembled by `assemble_solutions.py`. Both
+notebooks therefore stay in sync with sections 1–11 automatically.
+
+### What the solutions actually establish
+
+Working the TODOs through **overturns the conclusion the worked example suggests**,
+which is the best possible argument for making a student do them:
+
+- **Step 1.3, compensation.** With eight equal blocks, the RT deficit tracks the
+  neuron almost exactly (both worst in block 3, both back to baseline by block 8) —
+  that is the drug washing out, not compensation. The peak-velocity deficit does
+  the opposite: it grows monotonically to −629 deg/s and is worst when the neuron
+  has fully recovered. So neither measure shows compensation, and they fail to for
+  different reasons.
+- **The anticipation trap, quantified.** Anticipation climbs 4.0% → 22.2% across
+  the session, which is what makes *both* directions faster late on. Reading raw
+  rightward RT alone would suggest the deficit was cured; the deficit actually goes
+  from +18 to +42 ms.
+- **Step 2, the backwards RT result explained.** The good object gives the *longer*
+  RT. Part of the reason is that the monkey anticipates ten times more often on
+  low-value trials (0.7% vs 7.4%), dragging the bad-object median down. Removing
+  anticipated trials shrinks the gap from +41 to +32 ms but does not abolish it.
+- **Step 3, the headline.** Reaction time is the only measure whose value gap moves
+  on the *intact* side. Duration is the one solid positive: the gap changes on the
+  affected side (−12.2 ms, p < 0.001), is flat on the intact side, survives Holm
+  correction, and agrees between mean- and median-based tests.
+
+### Two corrections caught before shipping
+
+- An answer table quoted per-block endpoint scatter that had only been computed
+  per-phase — the numbers were invented. Recomputed: rightward scatter rises
+  0.92 → 1.24 → 1.34 → 2.09 while leftward ends where it began.
+- The summary answers first quoted **raw** contrast p-values where the notebook
+  prints **Holm-corrected** ones. Corrected: peak velocity 0.22 → 0.656 and radial
+  error 0.021 → 0.062, which moves both out of significance.
+
+The permutation cross-check was also extended from three measures to five, and it
+earns its place: it **flips the verdict** for gaze hold (p < 0.001 on means,
+≈ 0.11 on medians) and for radial error. Those disagreements are reported rather
+than smoothed over, and the quoted permutation p-values are given as approximate,
+since 2000 shuffles give a slightly different answer each run.
+
+### Verification
+
+Solutions notebook: 0 errors, 43 figures, 140 cells. Student notebook unchanged at
+0 errors, 21 figures, 111 cells.

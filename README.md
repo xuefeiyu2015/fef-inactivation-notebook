@@ -5,6 +5,9 @@
 **Click the badge above to open the notebook in Google Colab.** Nothing needs
 installing and the data downloads itself — just run the cells from the top.
 
+There is also a **worked-solutions version** with every `TODO` answered:
+[![Open Solutions In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/xuefeiyu2015/fef-inactivation-notebook/blob/main/fef-inactivation-colab-SOLUTIONS.ipynb)
+
 A teaching notebook for a real monkey neurophysiology dataset: eye movements and
 single-neuron recordings from the **frontal eye field (FEF)**, recorded before,
 during and after the FEF was temporarily silenced with muscimol.
@@ -78,6 +81,7 @@ Set `USE_LOCAL_FILE = True` and point `LOCAL_FOLDER` at a folder holding the
 | File | Who runs it | What it does |
 |---|---|---|
 | `fef-inactivation-colab.ipynb` | the student, on Colab | the teaching notebook |
+| `fef-inactivation-colab-SOLUTIONS.ipynb` | the instructor | the same notebook with every project `TODO` worked through |
 | `convert-mat-to-npz.py` | the maintainer, once | packs raw OHLab `.mat` sessions into the `.npz` files |
 | `implementation_log.md` | — | dated record of changes |
 
