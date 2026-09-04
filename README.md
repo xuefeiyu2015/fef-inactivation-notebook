@@ -8,19 +8,12 @@ installing and the data downloads itself — just run the cells from the top.
 There is also a **worked-solutions version** with every `TODO` answered:
 [![Open Solutions In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/xuefeiyu2015/fef-inactivation-notebook/blob/main/fef-inactivation-colab-SOLUTIONS.ipynb)
 
-A teaching notebook for a real monkey neurophysiology dataset: eye movements and
+A practise notebook for a real monkey neurophysiology dataset: eye movements and
 single-neuron recordings from the **frontal eye field (FEF)**, recorded before,
 during and after the FEF was temporarily silenced with muscimol.
 
-It is written for someone new to Python — plain functions, explicit `for` loops,
-no classes, and only libraries that Colab already ships with. Results are shown as
-plots rather than printed numbers, with bootstrap error bars wherever a comparison
-is being made.
 
 ## The project
-
-The notebook is a **project**, not a tour. Sections 1–11 build the tools; section 12
-is the project the student carries out and writes up.
 
 > **Goal: investigate how reward value shapes the effect of FEF inactivation.**
 > Does silencing the FEF damage saccades to a valuable object as much as saccades
@@ -34,8 +27,7 @@ is the project the student carries out and writes up.
 | 4 | Extension (design exercise): what if value were predictable from location? |
 
 Each step gives one measure worked end to end as a template, then `TODO` cells for
-the rest. Every measure is computed for the student — they choose what to plot and
-what to compare.
+the rest. 
 
 ## What the notebook covers
 
@@ -127,10 +119,6 @@ and reproduces its numbers on `Adams102325_FRAC`:
 | Median RT, rightward | 116 / 150 / 112 ms | 116 / 152 / 114 ms |
 | Median peak velocity, rightward | 1480 / 1379 / 949 deg/s | 1480 / 1379 / 951 deg/s |
 
-The one-trial difference is NaN handling: MATLAB's `smoothdata(..., 'omitnan')`
-tolerates missing samples inside a trace, while scipy's `savgol_filter` refuses to
-run on them, so the notebook skips those trials rather than inventing values
-across the gap.
 
 All three sessions execute top to bottom without errors, including
 `Adams110725_OneDR`, which has only two injection phases and therefore exercises
