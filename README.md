@@ -104,24 +104,3 @@ MATLAB `containers.Map` objects that scipy cannot read at all, so they are not
 carried over — which means the counts of *incorrect* trials are not available
 here. Only correct trials are in these files.
 
-## Verification
-
-The notebook's saccade detector is a Python port of the lab's MATLAB `RT_Old.m`
-and reproduces its numbers on `Adams102325_FRAC`:
-
-| Measure | Notebook | MATLAB |
-|---|---|---|
-| Saccades detected | 1716 / 1740 (98.6%) | 1717 / 1740 (98.7%) |
-| Median amplitude | 19.4° (targets at 20°) | 19.6° |
-| Median direction error | 3.1° | 3.3° |
-| Within 30° of target | 100% | 100% |
-| Median RT, leftward (before/during/after) | 98 / 102 / 104 ms | 98 / 102 / 104 ms |
-| Median RT, rightward | 116 / 150 / 112 ms | 116 / 152 / 114 ms |
-| Median peak velocity, rightward | 1480 / 1379 / 949 deg/s | 1480 / 1379 / 951 deg/s |
-
-
-All three sessions execute top to bottom without errors, including
-`Adams110725_OneDR`, which has only two injection phases and therefore exercises
-the generic phase handling.
-
-
